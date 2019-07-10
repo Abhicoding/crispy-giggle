@@ -1,0 +1,25 @@
+// file to overide ant default vars
+// only the varibales decalared in the below link can be overriden
+// https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+
+// -------- Colors -----------
+@primary-color: #0098ff;
+@info-color: @blue-6;
+@success-color: #00cf11;
+@processing-color: @blue-6;
+@error-color:#f62525;
+@highlight-color: @red-6;
+@warning-color: @gold-6;
+@normal-color: #d9d9d9;
+@white: #fff;
+@black: #000;
+
+//Custom Colors
+@orange: #ff8043;
+
+// LINK
+@link-color: @primary-color;
+@link-hover-color: color(~`colorPalette('@{link-color}', 5) `);
+@link-active-color: color(~`colorPalette('@{link-color}', 7) `);
+@link-decoration: none;
+@link-hover-decoration: none;
