@@ -1,5 +1,5 @@
 # single-spa-portal-example
-The goal of this project is to provide an example of how to build a portal like app which consists of multiple single page applications (SPA's). Each SPA should be self contained with its own build process. It should be individually deployable without the need to deploy the whole application if there are changes to any individual app.
+The goal of this project is to provide an example of how to build a app which consists of multiple single page applications (SPA's). Each SPA should be self contained with its own build process. It should be individually deployable without the need to deploy the whole application if there are changes to any individual app.
 
 This example is based on [simple-single-spa-webpack-example](https://github.com/joeldenning/simple-single-spa-webpack-example/blob/master/README.md) but will provide further features like:
 
@@ -7,8 +7,6 @@ This example is based on [simple-single-spa-webpack-example](https://github.com/
 - [x] Load SPA's on demand with SystemJS
 - [x] Provide a way to communicate between each SPA
 - [x] Get assets (like images, fonts, css, etc.) coming from different servers to work
-- [x] Support multiple Angular versions without zone.js conflicts. For details see [Multiple Angular Apps](#multiple-angular-apps)
-- [x] Support Angular AOT Builds
 
 ## How to run this project
 1. Clone this project
@@ -64,18 +62,6 @@ Here is a graphic which illustrates what actually happens:
 ### Cons:
 As already mentioned, the biggest disadvantage is that all stores have to be loaded when the root-application loads. The reason for this is that we are building a project that will have a huge application state being entirely in the browser. The user will likely input 1h of data without any server communication and once he is done, he will save everything with one click. 
 This must not necessarily be your use-case. For example if you are only interested in inter-app-communication with any currently active app, you may not need to load all states beforehand but rather load them while the apps mount.  
-
-## Multiple Angular Apps
-The big issue with Angular 2+ is, that it (or third party libraries which Angular depends on) pollute the global window object. One such library is Zone.js. Zone.js monkey patches all async events and add its reference to the window object. If you have multiple Angular apps running, Angular will complain that Zone.js is already loaded.
-
-One possible solution is to separate Zone.js from all Angular apps and load Zone.js only once in the portal. This may not be the best solution because as soon as you have multiple different Angular versions as apps in the portal, it may be possible that some of them require different Zone.js versions. Which may break everything at that point. Even though it is not a great solution, it may be the best solution we have with the current state of angular.
-
-The other solution I found is to load every Angular app in its own iframe. Doing that, every Angular app runs completely isolated. You can then set the render target for Angular to the parent window. With this solution Angular runs in a complete isolated context but renders all content to the main DOM. Sadly this is also not the perfect solution since you open up many other issues you have to deal with. A few examples are: 
-- You need to manually put all CSS styles from the iframe to the parent window 
-- The angular router can no longer access the browser URL to update it according to the app routing 
-- You can't use third party UI libraries that depent on document events. (i.e. a dropdown component that wants to know when you click on the document to close it.) 
-
-In the future we may have better solutions like Angular elements to deal with this issue, until then our best bet is to put a single Zone.js instance into the portal app. Which is exactly what I did in this example project.
 
 ## Forks
 - https://github.com/tsukhu/single-spa-portal-monorepo (If you plan to use a monorepo with multiple apps maintained by the same team, you may be interested in this fork which integrates yarn workspaces + lerna to simplify the development process. For more details see: [here](https://github.com/me-12/single-spa-portal-example/issues/45))
